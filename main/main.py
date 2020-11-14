@@ -42,7 +42,7 @@ def create_room(data):
     emit('join_room', {'room': room})
 
 @socketio.on('join')
-def join_room(data):
+def join_game_room(data):
     #Join game room
     room = int(data['room']) 
     join_room(room)
