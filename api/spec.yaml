@@ -1,0 +1,45 @@
+swagger: "2.0"
+info:
+  title: my-api
+  description: Serverless APIs with API Gateway
+  version: 1.0.0
+schemes:
+ - https
+produces:
+ - application/json
+paths:
+  /spell/{spell_id}:
+      get:
+        summary: Get spell by Id
+        operationId: getSpell
+        x-google-backend:
+          address: https://europe-west1-oxford-hack-295611.cloudfunctions.net/function-1
+          protocol: h2
+
+        parameters:
+          - name: spell_id
+            in: path
+            description: Spell Id
+            required: true
+            type: string
+        
+        responses:
+          '200':
+            description: Response
+            schema:
+              type: string
+     
+definitions:
+  Spell:
+    type: object
+    required:
+     - damage
+     - stamina
+     - level
+    properties:
+      damage:
+        type: integer
+      stamina:
+        type: integer
+      level:
+        type: integer
