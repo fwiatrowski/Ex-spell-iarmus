@@ -16,11 +16,18 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, join_room, emit, send
 import json
+import sqlite3
+import random
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
+
+roomList = {}
+
+conn = sqlite3.connect('game.db')
 
 @app.route('/')
 def main():
@@ -28,13 +35,31 @@ def main():
     return render_template('index.html')
 
 @socketio.on('create')
-def on_create(data):
-    k = 0
-    print(str(data))
-    while k < 23:
-        emit('connection', {'status': 'worked'})
-        k = k+ 1
+def create_room(data):
+    room = random.randint(1,5000)
+    join_room(room)
+    roomList[room] = str(room) + "inlist"
+    emit('join_room', {'room': room})
 
+@socketio.on('join')
+def join_room(data):
+    #Join game room
+    room = int(data['room']) 
+    join_room(room)
+    print('existing room joined')
+    emit("message_event", "Yaaay", room = room)
+
+    send({"data":  roomList[room]}, room=room)
+  
+@socketio.on('play')
+def play(data):
+    room = data['room']
+    if room in roomList:
+        # add player and rebroadcast game object
+        # rooms[room].add_player(username)
+        
+        send(roomList[room].to_json(), room=room)
+  
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
