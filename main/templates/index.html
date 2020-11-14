@@ -7,12 +7,28 @@
 <body>
   <p>Some sample code to make sure Flask-SocketIO works...</p>
    <button onclick="createGame()">Create Game</button>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+     <input id ="roomId" type="search">
+    <button onclick="joinRoom()">Join Game</button>
+  
+   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
     var socket = io.connect('https://' + document.domain + ':' + location.port);
+    // verify our websocket connection is established
     socket.on('connection', function() {
         console.log('Websocket connected!');
     });
+    socket.on('join_room', function(data) {
+        console.log(data);
+        socket.emit('join_room', {room: "ping"});
+    });
+    socket.on('message_event', function(data) {
+        console.log(data);
+    });
+     
+function joinRoom() {
+      console.log('Joining...' + roomId.value);
+      socket.emit('join', {"room": roomId.value});
+    }
    
     function createGame() {
       console.log('Creating game...');
