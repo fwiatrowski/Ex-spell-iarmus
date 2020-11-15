@@ -49,7 +49,7 @@ class Player(object):
         if self.Health <= 0:
             self.State = 'Dead' 
             
-    def Level(self): #Increases their level if the
+    def LevelChange(self): #Increases their level if the
         if  0<= self.DamageCaused <10:
             self.Level = 1
         if  11< self.DamageCaused <20:
@@ -64,9 +64,9 @@ class Player(object):
     def StaminaUpdate(self): #Updates Stamina by 1 every time function is called
          self.Stamina +=1 #Scale this depending on how often the state is updated
             
-    def Update(self): #Updates player state 
-        self.Level()
-        self.StaminaUpdate()
+    def Update(self, player): #Updates player state 
+        player.LevelChange()
+        player.StaminaUpdate()
         
  
     

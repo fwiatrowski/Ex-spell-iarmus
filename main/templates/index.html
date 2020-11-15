@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Flask SocketIO Test</title>
+  <title>Ex-spell-Iarmus</title>
 </head>
 <body>
-  <p>Some sample code to make sure Flask-SocketIO works...</p>
+  <p>Ex-spell-Iarmus Game</p>
    <button onclick="createGame()">Create Game</button>
    <input id ="username" type="search" value="Enter your username">
      <input id ="roomId" type="search">
@@ -13,6 +13,16 @@
   
 
     <button onclick="castSpell()">Cast Spell</button>
+    <label id="1healthlabel" for="p1health"></label>
+    <progress id="p1health" value="100" max="100"></progress>
+    <label id="2healthlabel" for="p2health"></label>
+    <progress id="p2health" value="100" max="100"></progress>
+
+    <label id="1levellabel" for="p1level"></label>
+    <progress id="p1level" value="0" max="50"></progress>
+    <label id="2levellabel" for="p2level"></label>
+    <progress id="p2level" value="0" max="50"></progress>
+
    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
   <script type="text/javascript" charset="utf-8">
     var socket = io.connect('https://' + document.domain + ':' + location.port);
@@ -27,6 +37,18 @@
     });
     socket.on('message_event', function(data) {
         console.log(data);
+    });
+
+    socket.on('game_update', function(data) {
+        document.getElementById("p1health").value = data["p1Health"]
+        document.getElementById("p2health").value = data["p2Health"]
+        document.getElementById("1healthlabel").innerHTML = data["p1Name"] + " health";
+        document.getElementById("2healthlabel").innerHTML = data["p2Name"] + " health";
+
+        document.getElementById("p1level").value = data["p1Level"]
+        document.getElementById("p2level").value = data["p2Level"]
+        document.getElementById("1levellabel").innerHTML = data["p1Name"] + " level";
+        document.getElementById("2levellabel").innerHTML = data["p2Name"] + " level";
     });
      
 function joinRoom() {
