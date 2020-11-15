@@ -17,13 +17,12 @@
   <script type="text/javascript" charset="utf-8">
     var socket = io.connect('https://' + document.domain + ':' + location.port);
     // verify our websocket connection is established
-    var room = 0;
     socket.on('connection', function() {
         console.log('Websocket connected!');
     });
     socket.on('join_room', function(data) {
         console.log(data);
-        room = data['room'];
+        roomNo = data['room'];
         socket.emit('join_room', {room: "ping"});
     });
     socket.on('message_event', function(data) {
@@ -32,7 +31,7 @@
      
 function joinRoom() {
       console.log('Joining...' + roomId.value);
-      room = roomId.value;
+      roomNo = roomId.value;
       socket.emit('join', {"room": roomId.value, "username": username.value});
     }
    
@@ -42,8 +41,9 @@ function joinRoom() {
     }
     function castSpell() {
       console.log('Playing');
-      socket.emit('play', {"room": room, "spell": 1, "username": username.value});
+      socket.emit('play', {"room": roomNo, "spell": 1, "username": username.value});
     }
+   
   </script>
 </body>
 </html>

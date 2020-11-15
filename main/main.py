@@ -60,15 +60,16 @@ def join_game_room(data):
   
 @socketio.on('play')
 def play(data):
+    roomNumber = int(data['room'])
     room = roomList[int(data['room'])]
     playerOne = room.Player1
     playerTwo = room.Player2
     gameEnd = False
     if room.playerOneObj.Health < 0:
-        emit("end_game_message", "Game over, " +playerTwo + " Won" , room = room)
+        emit("end_game_message", "Game over, " +playerTwo + " Won" , room = roomNumber)
         gameEnd = True
     elif room.playerTwoObj.Health < 0:
-        emit("message_event", "Game over, " +playerOne + " Won" , room = room)
+        emit("message_event", "Game over, " +playerOne + " Won" , room = roomNumber)
         gameEnd = True
     elif gameEnd == False:
         i = None
@@ -78,10 +79,12 @@ def play(data):
             i = room.playerTwoObj
         #Run the game spell casting etc... here
         spell = int(data['spell'])
+        emit("message_event", "test", room = room)
         i.Cast(room.SpellList[spell])
-        emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = room )
-        emit("message_event", playerOne + "Health: " + room.playerOneObj.Health , room = room )
-        emit("message_event", playerTwo + "Health: " + room.playerTwoObj.Health , room = room )
+        print("emits below")
+        emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = roomNumber )
+        emit("message_event", playerOne + "Health: " + str(room.playerOneObj.Health) , room = roomNumber )
+        emit("message_event", playerTwo + "Health: " + str(room.playerTwoObj.Health) , room = roomNumber )
 
 
     
