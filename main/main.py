@@ -18,6 +18,8 @@ from flask_socketio import SocketIO, join_room, emit, send
 import json
 import sqlite3
 import random
+
+from backend.game_objects.Game import *
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 
@@ -38,7 +40,9 @@ def main():
 def create_room(data):
     room = random.randint(1,5000)
     join_room(room)
-    roomList[room] = str(room) + "inlist"
+    playerOne = data['username']
+
+    roomList[room] = Game(playerOne)
     emit('join_room', {'room': room})
 
 @socketio.on('join')
@@ -46,20 +50,51 @@ def join_game_room(data):
     #Join game room
     room = int(data['room']) 
     join_room(room)
+    player2 = data['username']
+    roomList[room].addPlayer(player2)
+    roomList[room].instantiatePlayers()
     print('existing room joined')
-    emit("message_event", "Yaaay", room = room)
+    emit("message_event", player2 + "Joined the lobby", room = room)
 
-    send({"data":  roomList[room]}, room=room)
+    send({"data":  data['room']}, room=room)
   
 @socketio.on('play')
 def play(data):
-    room = data['room']
-    if room in roomList:
-        # add player and rebroadcast game object
-        # rooms[room].add_player(username)
-        
-        send(roomList[room].to_json(), room=room)
-  
+    roomNumber = int(data['room'])
+    room = roomList[int(data['room'])]
+    playerOne = room.Player1
+    playerTwo = room.Player2
+    gameEnd = False
+    if room.playerOneObj.Health < 0:
+        emit("end_game_message", "Game over, " +playerTwo + " Won" , room = roomNumber)
+        gameEnd = True
+    elif room.playerTwoObj.Health < 0:
+        emit("message_event", "Game over, " +playerOne + " Won" , room = roomNumber)
+        gameEnd = True
+    elif gameEnd == False:
+        i = None
+        j = None
+        if data["username"] == playerOne:
+            i = room.playerOneObj
+            j = room.playerTwoObj
+        else:
+            i = room.playerTwoObj
+            j = room.playerOneObj
+        #Run the game spell casting etc... here
+        spell = int(data['spell'])
+        emit("message_event", "test", room = room)
+        i.Cast(room.SpellList[spell])
+        j.Hit(room.SpellList[spell])
+        i.Update()
+        j.Update()
+        print("emits below")
+        emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = roomNumber )
+        emit("message_event", playerOne + "Health: " + str(room.playerOneObj.Health) , room = roomNumber )
+        emit("message_event", playerTwo + "Health: " + str(room.playerTwoObj.Health) , room = roomNumber )
+
+
+    
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This

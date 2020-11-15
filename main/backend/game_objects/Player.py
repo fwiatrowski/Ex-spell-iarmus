@@ -19,29 +19,35 @@ class Player(object):
     def Cast(self, Spell): #method for the player to cast a spell, saves the spell object into Player.Casted
         if not self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
-                if self.Stamina >= Spell.Stamina:
+                if self.Stamina >= Spell.StaminaCost:
                     self.Casted = Spell
                     self.Stamina -= Spell.StaminaCost
                     self.DamageCaused += Spell.Damage
-                elif self.Stamina < Spell.Stamina:
+                elif self.Stamina < Spell.StaminaCost:
                     self.SpellQ.append(Spell)
-            else print("you cannot cast this spell boy")
+            else:
+                print("you cannot cast this spell boy")
 
         if self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
-                if self.Stamina >= self.SpellQ[0].StaminaCost:
+                if self.Stamina >= self.SpellQ[0]:
                     self.Casted = self.SpellQ[0]
                     self.Stamina -=  self.SpellQ[0].StaminaCost
                     self.DamageCaused -= self.SpellQ[0].Damage
                     self.SpellQ.append(Spell)
                 else:
                     self.SpellQ.append(Spell)
-            else print("you cannot cast this spell you kid")
+            else:
+                print("you cannot cast this spell you kid")
                 
     def Hit(self, Spell): #method for taking damage
         self.Health -= Spell.Damage
-        if self.Health <= 0: 
+        if (self.Health <= 0):
             self.Death()
+    
+    def Death(self): #Deals with the case if their health falls below 0
+        if self.Health <= 0:
+            self.State = 'Dead' 
             
     def Level(self): #Increases their level if the
         if  0<= self.DamageCaused <10:
