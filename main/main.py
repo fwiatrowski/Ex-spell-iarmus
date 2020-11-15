@@ -52,21 +52,22 @@ def join_game_room(data):
     join_room(room)
     player2 = data['username']
     roomList[room].addPlayer(player2)
+    roomList[room].instantiatePlayers()
     print('existing room joined')
     emit("message_event", player2 + "Joined the lobby", room = room)
 
-    send({"data":  roomList[room]}, room=room)
+    send({"data":  data['room']}, room=room)
   
 @socketio.on('play')
 def play(data):
-    room = data['room']
+    room = roomList[int(data['room'])]
     playerOne = room.Player1
     playerTwo = room.Player2
     gameEnd = False
-    if room.playerOneObj.Health > 0:
+    if room.playerOneObj.Health < 0:
         emit("end_game_message", "Game over, " +playerTwo + " Won" , room = room)
         gameEnd = True
-    elif room.playerTwoObj.Health > 0:
+    elif room.playerTwoObj.Health < 0:
         emit("message_event", "Game over, " +playerOne + " Won" , room = room)
         gameEnd = True
     elif gameEnd == False:
@@ -76,6 +77,11 @@ def play(data):
         else:
             i = room.playerTwoObj
         #Run the game spell casting etc... here
+        spell = int(data['spell'])
+        i.Cast(room.SpellList[spell])
+        emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = room )
+        emit("message_event", playerOne + "Health: " + room.playerOneObj.Health , room = room )
+        emit("message_event", playerTwo + "Health: " + room.playerTwoObj.Health , room = room )
 
 
     
