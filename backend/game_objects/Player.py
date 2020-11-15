@@ -29,7 +29,7 @@ class Player(object):
 
         if self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
-                if self.Stamina >= self.SpellQ[0]:
+                if self.Stamina >= self.SpellQ[0].StaminaCost:
                     self.Casted = self.SpellQ[0]
                     self.Stamina -=  self.SpellQ[0].StaminaCost
                     self.DamageCaused -= self.SpellQ[0].Damage
@@ -40,11 +40,8 @@ class Player(object):
                 
     def Hit(self, Spell): #method for taking damage
         self.Health -= Spell.Damage
-        if (self.Health <= 0) self.Death()
-    
-    def Death(self): #Deals with the case if their health falls below 0
-        if self.Health <= 0:
-            self.State = 'Dead' 
+        if self.Health <= 0: 
+            self.Death()
             
     def Level(self): #Increases their level if the
         if  0<= self.DamageCaused <10:
