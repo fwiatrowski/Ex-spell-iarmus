@@ -29,7 +29,7 @@ class Player(object):
 
         if self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
-                if self.Stamina >= self.SpellQ[0].Stamina:
+                if self.Stamina >= self.SpellQ[0].StaminaCost:
                     self.Casted = self.SpellQ[0]
                     self.Stamina -=  self.SpellQ[0].StaminaCost
                     self.DamageCaused -= self.SpellQ[0].Damage
