@@ -7,6 +7,7 @@
 <body>
   <p>Some sample code to make sure Flask-SocketIO works...</p>
    <button onclick="createGame()">Create Game</button>
+   <input id ="username" type="search" value="Enter your username">
      <input id ="roomId" type="search">
     <button onclick="joinRoom()">Join Game</button>
   
@@ -27,12 +28,12 @@
      
 function joinRoom() {
       console.log('Joining...' + roomId.value);
-      socket.emit('join', {"room": roomId.value});
+      socket.emit('join', {"room": roomId.value, "username": username.value});
     }
    
     function createGame() {
       console.log('Creating game...');
-      socket.emit('create', {body: "ping"});
+      socket.emit('create', {body: "ping", "username": username.value});
     }
   </script>
 </body>
