@@ -90,7 +90,7 @@ def play(data):
   
         print("emits below")
         emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = roomNumber )
-        emit("game_update", {"p1Health": room.playerOneObj.Health, "p2Health": room.playerTwoObj.Health,
+        emit("game_update", {"p1Name": playerOne, "p2Name": playerTwo, "p1Health": room.playerOneObj.Health, "p2Health": room.playerTwoObj.Health,
         "p1Level": room.playerOneObj.Level, "p2Level": room.playerTwoObj.Level  } , room = roomNumber )
         emit("message_event", playerOne + "Health: " + str(room.playerOneObj.Health) , room = roomNumber )
         emit("message_event", playerTwo + "Health: " + str(room.playerTwoObj.Health) , room = roomNumber )
