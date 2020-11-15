@@ -28,6 +28,10 @@
     socket.on('message_event', function(data) {
         console.log(data);
     });
+
+    socket.on('game_update', function(data) {
+        console.log(data);
+    });
      
 function joinRoom() {
       console.log('Joining...' + roomId.value);
