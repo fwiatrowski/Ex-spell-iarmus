@@ -47,12 +47,17 @@ def join_game_room(data):
     room = int(data['room']) 
     join_room(room)
     print('existing room joined')
+<<<<<<< Updated upstream
     emit("message_event", "Yaaay", room = room)
+=======
+    emit("message_event", player2 + " has joined the lobby", room = room)
+>>>>>>> Stashed changes
 
     send({"data":  roomList[room]}, room=room)
   
 @socketio.on('play')
 def play(data):
+<<<<<<< Updated upstream
     room = data['room']
     if room in roomList:
         # add player and rebroadcast game object
@@ -60,6 +65,41 @@ def play(data):
         
         send(roomList[room].to_json(), room=room)
   
+=======
+    roomNumber = int(data['room'])
+    room = roomList[int(data['room'])]
+    playerOne = room.Player1
+    playerTwo = room.Player2
+    gameEnd = False
+    if room.playerOneObj.Health <= 0:
+        emit("message_event", "Game over, " +playerTwo + " Won" , room = roomNumber)
+        gameEnd = True
+    elif room.playerTwoObj.Health <= 0:
+        emit("message_event", "Game over, " +playerOne + " Won" , room = roomNumber)
+        gameEnd = True
+    elif gameEnd == False:
+        i = None
+        j = None
+        if data["username"] == playerOne:
+            i = room.playerOneObj
+            j = room.playerTwoObj
+        else:
+            i = room.playerTwoObj
+            j = room.playerOneObj
+        #Run the game spell casting etc... here
+        spell = int(data['spell'])
+        i.Cast(room.SpellList[spell])
+        j.Hit(room.SpellList[spell])
+        i.Update(i)    
+        j.Update(j)
+  
+        print("emits below")
+        emit("game_update", {"p1Name": playerOne, "p2Name": playerTwo, "p1Health": room.playerOneObj.Health, "p2Health": room.playerTwoObj.Health,
+        "p1Level": room.playerOneObj.Level, "p2Level": room.playerTwoObj.Level  } , room = roomNumber )
+        
+    
+
+>>>>>>> Stashed changes
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This
