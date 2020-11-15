@@ -69,7 +69,7 @@ def play(data):
     playerTwo = room.Player2
     gameEnd = False
     if room.playerOneObj.Health < 0:
-        emit("end_game_message", "Game over, " +playerTwo + " Won" , room = roomNumber)
+        emit("message_event", "Game over, " +playerTwo + " Won" , room = roomNumber)
         gameEnd = True
     elif room.playerTwoObj.Health < 0:
         emit("message_event", "Game over, " +playerOne + " Won" , room = roomNumber)
@@ -93,7 +93,6 @@ def play(data):
   
         emit("game_update", {"p1Name": playerOne, "p2Name": playerTwo, "p1Health": room.playerOneObj.Health, "p2Health": room.playerTwoObj.Health,
         "p1Level": room.playerOneObj.Level, "p2Level": room.playerTwoObj.Level  } , room = roomNumber )
-
 
     
 
