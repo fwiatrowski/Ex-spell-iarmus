@@ -19,11 +19,11 @@ class Player(object):
     def Cast(self, Spell): #method for the player to cast a spell, saves the spell object into Player.Casted
         if not self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
-                if self.Stamina >= Spell.Stamina:
+                if self.Stamina >= Spell.StaminaCost:
                     self.Casted = Spell
                     self.Stamina -= Spell.StaminaCost
                     self.DamageCaused += Spell.Damage
-                elif self.Stamina < Spell.Stamina:
+                elif self.Stamina < Spell.StaminaCost:
                     self.SpellQ.append(Spell)
             else:
                 print("you cannot cast this spell boy")
