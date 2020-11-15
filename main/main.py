@@ -73,14 +73,18 @@ def play(data):
         gameEnd = True
     elif gameEnd == False:
         i = None
+        j = None
         if data["username"] == playerOne:
             i = room.playerOneObj
+            j = room.playerTwoObj
         else:
             i = room.playerTwoObj
+            j = room.playerOneObj
         #Run the game spell casting etc... here
         spell = int(data['spell'])
         emit("message_event", "test", room = room)
         i.Cast(room.SpellList[spell])
+        j.Hit(room.SpellList[spell])
         print("emits below")
         emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = roomNumber )
         emit("message_event", playerOne + "Health: " + str(room.playerOneObj.Health) , room = roomNumber )

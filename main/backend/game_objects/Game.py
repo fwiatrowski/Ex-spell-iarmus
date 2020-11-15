@@ -18,6 +18,3 @@ class Game(object):
         self.playerOneObj = Player(self.Player1, 100, 100, 1, 'Alive', 0, 0)
         self.playerTwoObj = Player(self.Player2, 100, 100, 1, 'Alive', 0, 0)
 
-
-
-
