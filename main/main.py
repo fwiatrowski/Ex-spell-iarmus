@@ -60,12 +60,26 @@ def join_game_room(data):
 @socketio.on('play')
 def play(data):
     room = data['room']
-    if room in roomList:
-        # add player and rebroadcast game object
-        # rooms[room].add_player(username)
-        
-        send(roomList[room].to_json(), room=room)
-  
+    playerOne = room.Player1
+    playerTwo = room.Player2
+    gameEnd = False
+    if room.playerOneObj.Health > 0:
+        emit("end_game_message", "Game over, " +playerTwo + " Won" , room = room)
+        gameEnd = True
+    elif room.playerTwoObj.Health > 0:
+        emit("message_event", "Game over, " +playerOne + " Won" , room = room)
+        gameEnd = True
+    elif gameEnd == False:
+        i = None
+        if data["username"] == playerOne:
+            i = room.playerOneObj
+        else:
+            i = room.playerTwoObj
+        #Run the game spell casting etc... here
+
+
+    
+
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
     # Engine, a webserver process such as Gunicorn will serve the app. This

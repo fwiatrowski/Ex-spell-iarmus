@@ -1,5 +1,5 @@
 import time
-from Player import *
+from .Player import *
 class Game(object):
     def __init__(self, Player1):
         self.Player1 = Player1

@@ -25,7 +25,8 @@ class Player(object):
                     self.DamageCaused += Spell.Damage
                 elif self.Stamina < Spell.Stamina:
                     self.SpellQ.append(Spell)
-            else print("you cannot cast this spell boy")
+            else:
+                print("you cannot cast this spell boy")
 
         if self.SpellQ:
             if self.Level >= Spell.LevelUnlocked:
@@ -36,11 +37,13 @@ class Player(object):
                     self.SpellQ.append(Spell)
                 else:
                     self.SpellQ.append(Spell)
-            else print("you cannot cast this spell you kid")
+            else:
+                print("you cannot cast this spell you kid")
                 
     def Hit(self, Spell): #method for taking damage
         self.Health -= Spell.Damage
-        if (self.Health <= 0) self.Death()
+        if (self.Health <= 0):
+            self.Death()
     
     def Death(self): #Deals with the case if their health falls below 0
         if self.Health <= 0:
