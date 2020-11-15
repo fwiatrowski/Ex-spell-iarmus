@@ -85,6 +85,8 @@ def play(data):
         emit("message_event", "test", room = room)
         i.Cast(room.SpellList[spell])
         j.Hit(room.SpellList[spell])
+        i.Update()
+        j.Update()
         print("emits below")
         emit("message_event", i.Team + "Used: " +room.SpellList[spell].Name , room = roomNumber )
         emit("message_event", playerOne + "Health: " + str(room.playerOneObj.Health) , room = roomNumber )
